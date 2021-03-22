@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-
+# Networking konfigurieren
 Vagrant.configure("2") do |config|
   
  config.vm.box = "ubuntu/trusty64"
@@ -10,7 +10,8 @@ Vagrant.configure("2") do |config|
 
   # config.vm.synced_folder "../data", "/vagrant_data"
   # Provider-specific configuration so you can fine-tune various
-  
+
+# VM erstellen & konfigurieren  
  config.vm.provider "virtualbox" do |vb|
 
   vb.name = "Webserver-VM-M300-LB02-Muharemi"
@@ -19,11 +20,31 @@ Vagrant.configure("2") do |config|
 
 end
 
-
+# Webserver installieren & konfigurieren
   config.vm.provision "shell", inline: <<-SHELL
-  apt-get update
-  apt-get install -y apache2
+  sudo apt-get update
+  sudo apt-get install -y apache2
+  sudo apt-get update
+  sudo apt-get install libcap2-bin wireshark
+  sudo apt-get update
+  sudo apt install software-properties-common
+  sudo add-apt-repository ppa:deadsnakes/ppa
+  sudo apt-get update
+  sudo apt install python3.8
+  python ––version
+
+# Firewall rules erstellen
+  sudo apt install ufw
+  sudo ufw default deny incoming
+  sudo ufw default allow outgoing
+  sudo ufw allow 80
+  sudo ufw allow 8080
+  sudo ufw allow 'Apache'
+  sudo ufw --force enable
+  sudo ufw --force status verbose
 
   SHELL
+
+
 
 end

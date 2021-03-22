@@ -39,5 +39,6 @@ let message = 'Hello world';
 alert(message);
 ```
 
-
+https://app.vagrantup.com/ubuntu/boxes/trusty64
+https://phoenixnap.com/kb/how-to-install-python-3-ubuntu
 
