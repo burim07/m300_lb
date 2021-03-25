@@ -123,7 +123,7 @@ vb.memory = "1024"
 ```
 config.vm.provision "shell", inline: <<-SHELL  
 ```
->*e*
+>*VM Konfig endet hier. Jetzt folgen nur noch Befehle, die durchgeführt werden, nachdem die VM gestartet ist.*
 
 ```
 sudo apt-get update  
@@ -246,7 +246,7 @@ Nachdem die VM im Vagrantfile korrekt konfiguriert wurde, wird ein Vagrant up du
 
 Sollte vagrant up geklappt haben, wird nun auf die Website zugegriffen. Im Browser wird Localhost:8080 eingegeben und es sollte die Website anzeigen.
 >*Test wurde erfolgreich durchgeführt!* 
-Beweis:![Apache Website](/Documents/Schuel/TBZ/M300/Apache_website.png "Website")  
+Beweis:![Apache Website](/Users/burim/Desktop/Apache_website.PNG "Website")  
 
 --------------------------------------------------------  
 
