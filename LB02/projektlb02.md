@@ -41,4 +41,6 @@ alert(message);
 
 https://app.vagrantup.com/ubuntu/boxes/trusty64
 https://phoenixnap.com/kb/how-to-install-python-3-ubuntu
+https://linuxize.com/post/how-to-install-php-on-ubuntu-18-04/
+https://linuxize.com/post/how-to-install-php-on-ubuntu-18-04/
 

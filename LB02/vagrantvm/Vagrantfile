@@ -21,8 +21,12 @@ Vagrant.configure("2") do |config|
 end
 
 # Webserver installieren & konfigurieren
+  config.vm.provision "file", source: "../Website/index.php", destination: "/var/www/html/index.php"
+  config.vm.provision "file", source: "../Website/.htpasswd", destination: "/var/www/html/.htpasswd"
+  config.vm.provision "file", source: "../Website/.htaccess", destination: "/var/www/html/.htaccess"
   config.vm.provision "shell", inline: <<-SHELL
   sudo apt-get update
+  sudo apt-get -y upgrade
   sudo apt-get install -y apache2
   sudo apt-get update
   sudo apt-get install libcap2-bin wireshark
@@ -32,6 +36,7 @@ end
   sudo apt-get update
   sudo apt install python3.8
   python ––version
+  sudo apt -y install apache2 php libapache2-mod-php
 
 # Firewall rules erstellen
   sudo apt install ufw
@@ -45,5 +50,5 @@ end
   sudo ufw --force status verbose
 
   SHELL
-  
+
 end
