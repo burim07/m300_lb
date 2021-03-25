@@ -39,6 +39,23 @@ let message = 'Hello world';
 alert(message);
 ```
 
+
+
+
+INHALTSVERZEICHNIS:
+1.Einleitung
+2.Vagrantfile
+3.Apache konfiguration
+4.Firewall konfiguration
+5.Testing
+6.Quellenverzeichnis
+
+Sicherheiten:
+  config.vm.provision "file", source: "../Website/index.php", destination: "/var/www/html/index.php"
+  config.vm.provision "file", source: "../Website/.htpasswd", destination: "/var/www/html/.htpasswd"
+  config.vm.provision "file", source: "../Website/.htaccess", destination: "/var/www/html/.htaccess"
+
+QUELLENVERZEICHNIS:
 https://app.vagrantup.com/ubuntu/boxes/trusty64
 https://phoenixnap.com/kb/how-to-install-python-3-ubuntu
 https://linuxize.com/post/how-to-install-php-on-ubuntu-18-04/
