@@ -39,7 +39,7 @@ Möchte man eine Webseite erstellen, kann man dia DB auslassen und auf das PHP S
 
 ## **1.3 Grafische Uebersicht**
 
-![Grafische Uebersicht](/Users/burim/Documents/Schuel/TBZ/M300/Repository/m300_lb/m300_lb/lb3/grafische_uebersicht.png "Graf") 
+![Grafische Uebersicht](/lb3/docker/images/grafische_uebersicht.png "Graf") 
 
 --------------------------------------------------------  
 
@@ -194,25 +194,25 @@ Das Monitoring Tool wurde mit dem Befehl "docker run -d --name cadvisor -v /:/ro
 
 docker-compose up -d wird in der Befehlszeile eingegeben und alle Container laufen automatisch
 >*Test wurde erfolgreich durchgeführt!*
-Beweis: ![Container](/Users/burim/Documents/Schuel/TBZ/M300/Repository/m300_lb/m300_lb/lb3/container.png "Container") 
+Beweis: ![Container](/lb3/docker/images/container.png "Container") 
 
 #### 2. Login auf localhost:8080 funktioniert
 
 Container müssen am Laufen sein für diesen Test. Im Browser wird localhost:8080 eingegeben und mit den Credentials root/example eingeloggt.
 >*Test wurde erfolgreich durchgeführt!* 
-Beweis: ![Login](/Users/burim/Documents/Schuel/TBZ/M300/Repository/m300_lb/m300_lb/lb3/login.png "Login") 
+Beweis: ![Login](/lb3/docker/images/login.png "Login") 
 
 #### 3. Tabellen erfolgreich erstellt
 
 Nachdem Login werden die Tabellen erstellt mit der entsprechenden Datenbank. Datenbank Name ist lb03b und Tabellenname ist users. Bei der Tabelle wurden zwei Einträge "name" und "beruf" erstellt.
 >*Test wurde erfolgreich durchgeführt!* 
-Beweis: ![Tabelle](/Users/burim/Documents/Schuel/TBZ/M300/Repository/m300_lb/m300_lb/lb3/tabelle.png "Tabelle") 
+Beweis: ![Tabelle](/lb3/docker/images/tabelle.png "Tabelle") 
 
 #### 4. Output auf localhost:80
 
 Zuletzt wird überprüft, ob die Informationen korrekt angezeigt werden auf der Webseite. Mit localhost:80 via Browser wird darauf zugegriffen.
 >*Test wurde erfolgreich durchgeführt!* 
-Beweis: ![Output](/Users/burim/Documents/Schuel/TBZ/M300/Repository/m300_lb/m300_lb/lb3/output.jpeg "Output") 
+Beweis: ![Output](/lb3/docker/images/output.jpeg "Output") 
 
 --------------------------------------------------------  
 
