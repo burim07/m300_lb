@@ -222,4 +222,5 @@ Beweis: ![Output](/lb3/docker/images/output.jpeg "Output")
 <https://stackoverflow.com/questions/4567688/problems-with-a-php-shell-script-could-not-open-input-file> "Troubleshooting Part 1"  
 <https://askubuntu.com/questions/949401/how-to-fix-could-not-open-input-file-in-php-cli-7-0> "Troubleshooting Part 2"
 <https://magento.stackexchange.com/questions/257615/could-not-open-input-file-error-while-running-php-command-in-windows> "Troubleshooting Part 3"
+
 <https://forums.cpanel.net/threads/could-not-open-input-file.606991/> "Troubleshooting Part 4"
