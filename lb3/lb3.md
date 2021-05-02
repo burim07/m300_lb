@@ -200,13 +200,13 @@ Beweis: ![Container](/lb3/docker/images/container.png "Container")
 
 Container müssen am Laufen sein für diesen Test. Im Browser wird localhost:8080 eingegeben und mit den Credentials root/example eingeloggt.
 >*Test wurde erfolgreich durchgeführt!* 
-Beweis: ![Login](/lb3/docker/images/login.png "Login") 
+Beweis: ![Login](/lb3/docker/images/login.PNG "Login") 
 
 #### 3. Tabellen erfolgreich erstellt
 
 Nachdem Login werden die Tabellen erstellt mit der entsprechenden Datenbank. Datenbank Name ist lb03b und Tabellenname ist users. Bei der Tabelle wurden zwei Einträge "name" und "beruf" erstellt.
 >*Test wurde erfolgreich durchgeführt!* 
-Beweis: ![Tabelle](/lb3/docker/images/tabelle.png "Tabelle") 
+Beweis: ![Tabelle](/lb3/docker/images/tabelle.PNG "Tabelle") 
 
 #### 4. Output auf localhost:80
 
