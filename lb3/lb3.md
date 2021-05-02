@@ -251,6 +251,9 @@ Beweis:![Apache Website](/Users/burim/Desktop/Apache_website.PNG "Website")
 --------------------------------------------------------  
 
 # **4 QUELLENVERZEICHNIS:**
-<https://app.vagrantup.com/ubuntu/boxes/trusty64> "VMbox"  
-<https://phoenixnap.com/kb/how-to-install-python-3-ubuntu> "Python installieren"  
-<https://linuxize.com/post/how-to-install-php-on-ubuntu-18-04/> "PHP installieren"  
+<https://hub.docker.com/_/mysql> "MySQL"  
+<https://hub.docker.com/_/php> "PHP"  
+<https://stackoverflow.com/questions/4567688/problems-with-a-php-shell-script-could-not-open-input-file> "Troubleshooting Part 1"  
+<https://askubuntu.com/questions/949401/how-to-fix-could-not-open-input-file-in-php-cli-7-0> "Troubleshooting Part 2"
+<https://magento.stackexchange.com/questions/257615/could-not-open-input-file-error-while-running-php-command-in-windows> "Troubleshooting Part 3"
+<https://forums.cpanel.net/threads/could-not-open-input-file.606991/> "Troubleshooting Part 4"
