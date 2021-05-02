@@ -2,15 +2,15 @@
 
 echo "Hello from Burim's Container";
 
-$mysqli = new mysqli("db", "root", "example", "lb3");
+$mysqli = new mysqli("db", "root", "example", "lb03b");
 
-$sql = "INSERT INTO users (name, beruf, firma, sprache) VALUES('Lil Float', 'rapper', 'soundcloud', 'englisch')";
+$sql = "INSERT INTO users (name, beruf) VALUES('Lil Float', 'rapper')";
 $result = $mysqli->query($sql);
-$sql = "INSERT INTO users (name, beruf, firma, sprache) VALUES('XqcOw', 'streamer', 'twitch', 'franzoesisch')";
+$sql = "INSERT INTO users (name, beruf) VALUES('XqcOw', 'streamer')";
 $result = $mysqli->query($sql);
-$sql = "INSERT INTO users (name, beruf, firma, sprache) VALUES('EDP445', 'comedian', 'youtube', 'afrikanisch')";
+$sql = "INSERT INTO users (name, beruf) VALUES('EDP445', 'comedian')";
 $result = $mysqli->query($sql);
-$sql = "INSERT INTO users (name, beruf, firma, sprache) VALUES('Burim Muharemi', 'informatiker', 'Credit Suisse', 'albanisch')";
+$sql = "INSERT INTO users (name, beruf) VALUES('Burim Muharemi', 'informatiker')";
 $result = $mysqli->query($sql);
 
 
@@ -24,6 +24,6 @@ if ($result = $mysqli->query($sql)) {
 
 foreach ($users as $user) {
     echo "<br>";
-    echo $user->name . " " . $user->beruf . " " . $user->firma . " " . $user->sprache;
+    echo $user->name . " " . $user->beruf;
     echo "<br>";
 }

@@ -48,114 +48,132 @@ Möchte man eine Webseite erstellen, kann man dia DB auslassen und auf das PHP S
 ## **2.1 PHP Script**  
 
 ```
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
+<?php
 
-# Networking konfigurieren
-Vagrant.configure("2") do |config|
-  
- config.vm.box = "ubuntu/trusty64"
+echo "Hello from Burim's Container";
 
- config.vm.network "forwarded_port", guest: 80, host: 8080
+$mysqli = new mysqli("db", "root", "example", "lb03b");
 
-# VM erstellen & konfigurieren  
- config.vm.provider "virtualbox" do |vb|
+$sql = "INSERT INTO users (name, beruf) VALUES('Lil Float', 'rapper')";
+$result = $mysqli->query($sql);
+$sql = "INSERT INTO users (name, beruf) VALUES('XqcOw', 'streamer')";
+$result = $mysqli->query($sql);
+$sql = "INSERT INTO users (name, beruf) VALUES('EDP445', 'comedian')";
+$result = $mysqli->query($sql);
+$sql = "INSERT INTO users (name, beruf) VALUES('Burim Muharemi', 'informatiker')";
+$result = $mysqli->query($sql);
 
-  vb.name = "Webserver-VM-M300-LB02-Muharemi"
-  vb.gui = true
-  vb.memory = "1024"
 
-end
+$sql = 'SELECT * FROM users';
 
-# Webserver installieren & konfigurieren
-  config.vm.provision "shell", inline: <<-SHELL
-  sudo apt-get update
-  sudo apt-get -y upgrade
-  sudo apt-get install -y apache2
-  sudo apt-get update
-  sudo apt-get install libcap2-bin wireshark
-  sudo apt-get update
-  sudo apt install software-properties-common
-  sudo add-apt-repository ppa:deadsnakes/ppa
-  sudo apt-get update
-  sudo apt install python3.8
-  sudo apt -y install apache2 php libapache2-mod-php
+if ($result = $mysqli->query($sql)) {
+    while ($data = $result->fetch_object()) {
+        $users[] = $data;
+    }
+}
 
-# Firewall rules erstellen
-  sudo apt install ufw
-  sudo ufw default deny incoming
-  sudo ufw default allow outgoing
-  sudo ufw allow ssh
-  sudo ufw allow 80
-  sudo ufw allow 8080
-  sudo ufw allow 'Apache'
-  sudo ufw --force enable
-  sudo ufw --force status verbose
-
-  SHELL
-
-end
+foreach ($users as $user) {
+    echo "<br>";
+    echo $user->name . " " . $user->beruf;
+    echo "<br>";
+}
 ```
+Das echo wurde zu Beginn als Test verwendet. Dort habe ich überprüft, ob ich auf localhost zugreifen kann. Bei dem Test wird einfach ein Satz auf der Webseite abgebildet.
+Die Zeile mit $mysqli ist das wichtigste im Skript. Sie erzeugt eine Verbindung zwischen MySQL und PHP. "db" ist der Name vom MySQL, "root" ist der user, "example" ist das Passwort (kann abgeändert werden) und "lb3" ist die Datenbank, auf der ich eine Verbindung herstellen möchte.
+$sql $result sind die Informationen, die ich displayen lassen möchte.
+Nach den Informationen kommen die Abfragen. Hier werden die einzelnen Informationen korrekt eingeordnet, sodass alles in der entsprechenden Reihenfolge bei der Ausgabe ausgegeben wird. 
 
 --------------------------------------------------------  
 
 ## **2.2 Docker Compose File**  
 
 ```
-config.vm.box = "ubuntu/trusty64" 
+version: '3.1'
+
+services:
+  php:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - ./src:/var/www/html/
+  
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - mysql-data:/var/lib/mysql
+    
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    
+volumes:
+  mysql-data:
+```
+
+```
+services:
 ``` 
->*Hier wird die Box für die VM ausgewählt (in diesem Fall trusty64)*  
+>*Unter Services definieren wir die Container, die danach laufen werden.*  
 
 ```
-config.vm.network "forwarded_port", guest: 80, host: 8080 
+build:
 ``` 
->*Ports werden geöffnet, die man später für den Zugriff aud die VM benötigt*  
+>*Beim Build wird auf das Dockerfile referenziert und dieses für den PHP Container verwendet.*  
 
 ```
-config.vm.provider "virtualbox" do |vb|  
+ports:
 ```
->*Provider wird definiert*  
+>*Port mapping. Von meinem Port 80 zum Port 80 der Maschine.*  
 
 ```
-vb.name = "Webserver-VM-M300-LB02-Muharemi"  
+volumes:
 ```
->*Name der VM*  
+>*Inhalt von meinem src Folder in den ./src:/var/www/html/ Ordner des Containers.*  
 
 ```
-vb.gui = true  
+db Teil  
 ```
->*GUI wird aktiviert*  
+>*In diesem Abschnitt wird der Container db definiert. Diesen Teil habe ich vom MySQL dockerhub kopiert und ein wenig angepasst. Es verwendet den MySQL Image und mit dem command wird ein user erstellt. Das passwort wurde als "example" eingestellt, kann aber angepasst werden.*  
 
 ```
-vb.memory = "1024"  
+adminer Teil
 ```
->*Hier wird Anzahl RAM definiert*  
+>*In diesem Abschnitt wird der Container adminer definiert. Diesen Teil habe ich ebenfalls vom MySQL dockerhub kopiert. Das gleiche wie bei db, ausser das Port 8080 enabled wird. Mit dem Port haben wir später Zugriff auf die Mariadb.*  
+
+```
+volumes:
+  - mysql-data:/var/lib/mysql  
+```
+>*Hiermit werden persistente Volumes aktiviert. In diesem Code richten wir auf unserem System ein (von Docker verwaltetes) Volume namens "mysql-data" ein. Alle unsere Datenbanktabellen werden in "mysql-data" gespeichert. Dann mappen wir diese Daten auf /var/lib/mysql auf dem Container.*  
 
 --------------------------------------------------------
 
 ## **2.3 Dockerfile**  
 
 ```
-config.vm.provision "shell", inline: <<-SHELL  
+FROM php:7.4-apache
+RUN docker-php-ext-install mysqli
 ```
->*VM Konfig endet hier. Jetzt folgen nur noch Befehle, die durchgeführt werden, nachdem die VM gestartet ist.*
 
 ```
-sudo apt-get update  
+FROM php:7.4-apache
 ```
->*Paketlisten werden aktualisiert*
+>*Image 7.4-Apache wird für den Container verwendet.*
 
 ```
-sudo apt-get -y upgrade  
+RUN docker-php-ext-install mysqli
 ```
->*Installiert werden hier alle neuen Versionen eines Paketes, falls Aktualisierungen vorhanden sind*
-
-```
-sudo apt-get install -y apache2  
-```
->*Apache2 wird installiert (Website)*  
-
-#### Falls alles korrekt installiert wurde, kann nun auf die Website zugegriffen werden, indem man localhost:8080 im Browser eingibt.    
+>*MySQL Erweiterungen werden im Container heruntergeladen und ausgeführt.*  
 
 --------------------------------------------------------  
 
@@ -172,16 +190,29 @@ Das Monitoring Tool wurde mit dem Befehl "docker run -d --name cadvisor -v /:/ro
 
 # **3 Testing**  
 
-#### 1. VM starten mit "Vagrant up" 
+#### 1. Container werden gestartet mit docker-compose up -d 
 
-Nachdem die VM im Vagrantfile korrekt konfiguriert wurde, wird ein Vagrant up durchgeführt.
+docker-compose up -d wird in der Befehlszeile eingegeben und alle Container laufen automatisch
 >*Test wurde erfolgreich durchgeführt!*
+Beweis: ![Container](/Users/burim/Documents/Schuel/TBZ/M300/Repository/m300_lb/m300_lb/lb3/container.png "Container") 
 
-#### 2. Auf Website mit Browser zugreifen
+#### 2. Login auf localhost:8080 funktioniert
 
-Sollte vagrant up geklappt haben, wird nun auf die Website zugegriffen. Im Browser wird Localhost:8080 eingegeben und es sollte die Website anzeigen.
+Container müssen am Laufen sein für diesen Test. Im Browser wird localhost:8080 eingegeben und mit den Credentials root/example eingeloggt.
 >*Test wurde erfolgreich durchgeführt!* 
-Beweis:![Apache Website](/Users/burim/Desktop/Apache_website.PNG "Website")  
+Beweis: ![Login](/Users/burim/Documents/Schuel/TBZ/M300/Repository/m300_lb/m300_lb/lb3/login.png "Login") 
+
+#### 3. Tabellen erfolgreich erstellt
+
+Nachdem Login werden die Tabellen erstellt mit der entsprechenden Datenbank. Datenbank Name ist lb03b und Tabellenname ist users. Bei der Tabelle wurden zwei Einträge "name" und "beruf" erstellt.
+>*Test wurde erfolgreich durchgeführt!* 
+Beweis: ![Tabelle](/Users/burim/Documents/Schuel/TBZ/M300/Repository/m300_lb/m300_lb/lb3/tabelle.png "Tabelle") 
+
+#### 4. Output auf localhost:80
+
+Zuletzt wird überprüft, ob die Informationen korrekt angezeigt werden auf der Webseite. Mit localhost:80 via Browser wird darauf zugegriffen.
+>*Test wurde erfolgreich durchgeführt!* 
+Beweis: ![Output](/Users/burim/Documents/Schuel/TBZ/M300/Repository/m300_lb/m300_lb/lb3/output.jpeg "Output") 
 
 --------------------------------------------------------  
 
