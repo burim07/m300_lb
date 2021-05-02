@@ -1,20 +1,21 @@
-# **M300 LB02 Dokumentation - Webserver mit Website**  
+# **M300 LB03 Dokumentation - Webserver mit Website**  
 
 ##### Author: Burim Muharemi
-##### Datum: 25.03.2021  
+##### Datum: 02.05.2021  
 
 --------------------------------------------------------  
 
 #### **INHALTSVERZEICHNIS:**  
 
 - [1 Einleitung](#1-einleitung)
-- [2 Technische Infos](#2-technische-infos)
-- [2.1 Vagrantfile](#21-vagrantfile)
-- [2.2 Codedoku VM](#22-codedoku-vm)
-- [2.3 Codedoku Apache2](#23-codedoku-apache2)
-- [2.4 Codedoku Services](#24-codedoku-services)
-- [2.5 Codedoku Firewall Rules](#25-codedoku-firewall-rules)
-- [2.6 Sicherheitsmerkmale](#26-sicherheitsmerkmale)
+- [1.1 Service Beschreibung](#11-service-beschreibung)
+- [1.2 Service Anwendung](#12-service-anwendung)
+- [1.3 Grafische Uebersicht](#13-grafische-uebersicht)  
+- [2 Code Dokumentation](#2-code-dokumentation)
+- [2.1 PHP Script](#21-php-script)
+- [2.2 Docker Compose File](#22-docker-compose-file)
+- [2.3 Dockerfile](#23-dockerfile)
+- [2.4 Sicherheitsmerkmale](#24-sicherheitsmerkmale)
 - [3 Testing](#3-testing)
 - [4 Quellenverzeichnis](#4-quellenverzeichnis)     
   
@@ -23,14 +24,28 @@
 
 # **1 Einleitung**  
 
-In dieser Dokumentation wird beschrieben, wie ein Webserver automatisiert erstellt wird. Das Ziel ist mit Apache eine Website zu erstellen und Sicherheitsmerkmale hinzufügen (Firewall, Authentifizierung etc.).   
-Es werden ebenfalls weitere Services wie Python, PHP, Wireshark etc. installiert.   
+## **1.1 Service Beschreibung**
+
+In dieser Dokumentation wird gezeigt, wie mit Docker verschiedene Services automatisiert werden.  
+Mithilfe von PHP, Mysql und Apache werde ich eine Website aufzubauen, die Informationen via Mariadb holt und diese auf der Webseite anzeigt. Sobald alles aufgebaut ist, kann man sich über Mariadb anmelden, Datenbanken und darin Tabellen erstellen, die dann angezeigt werden. Wenn man die Tabellen anpassen möchte, muss man dafür das entsprechende PHP Script anpassen.
 
 --------------------------------------------------------  
 
-# **2 Technische Infos**  
+## **1.2 Service Anwendung**
 
-## **2.1 Vagrantfile**  
+Möchte man eine Webseite erstellen, kann man dia DB auslassen und auf das PHP Script konzentrieren. Möchte man aber, dass die Informationen via Mariadb geholt werden, dann sollte man am besten eine Umgebung mit PHP, Mysql und Apache verwenden und nach dieser Doku vorgehen. Es ist relativ nützlich, eine DB für die Infos zu benutzen, da die Informationen einfacher angepasst werden können, sobald neue Einträge in der DB reinkommen.
+
+--------------------------------------------------------  
+
+## **1.3 Grafische Uebersicht**
+
+![Grafische Uebersicht](/Users/burim/Documents/Schuel/TBZ/M300/Repository/m300_lb/m300_lb/lb3/grafische_uebersicht.png "Graf") 
+
+--------------------------------------------------------  
+
+# **2 Code Dokumentation**  
+
+## **2.1 PHP Script**  
 
 ```
 # -*- mode: ruby -*-
@@ -84,7 +99,7 @@ end
 
 --------------------------------------------------------  
 
-## **2.2 Codedoku VM**  
+## **2.2 Docker Compose File**  
 
 ```
 config.vm.box = "ubuntu/trusty64" 
@@ -118,7 +133,7 @@ vb.memory = "1024"
 
 --------------------------------------------------------
 
-## **2.3 Codedoku Apache2**  
+## **2.3 Dockerfile**  
 
 ```
 config.vm.provision "shell", inline: <<-SHELL  
@@ -144,94 +159,14 @@ sudo apt-get install -y apache2
 
 --------------------------------------------------------  
 
-## **2.4 Codedoku Services**  
+## **2.4 Sicherheitsmerkmale**  
 
-#### Wireshark
-```
-sudo apt-get install libcap2-bin wireshark  
-```
->*Wireshark wird installiert*
+|Sicherheitsmerkmal |Begründung                                                             |
+|-------------------|-----------------------------------------------------------------------|
+|1. Passwort        |Zugriff wird auf Mariadb mit Passwort beschränkt.                      |
+|2. Monitoring Tool |Tool "cadvisor" wurde für die Überwachung eingesetzt.                  |
 
-#### Python
-```
-sudo apt install software-properties-common
-```
->*Wird gebraucht, damit man Sachen aus der PPA repository herunterladen kann*  
-
-```
-sudo add-apt-repository ppa:deadsnakes/ppa  
-```
->*PPA wird hinzugefügt*  
-
-```
-sudo apt install python3.8
-```
->*Python wird installiert*  
-
-#### PHP
-```
-sudo apt -y install apache2 php libapache2-mod-php
-```
->*PHP wird installiert*
-
---------------------------------------------------------  
-
-## **2.5 Codedoku Firewall Rules**  
-
-```
-sudo apt install ufw
-```
->*UFW wird installiert*  
-
-```
-sudo ufw default deny incoming
-```
->*Alles, was hereinkommt, wird geblockt*  
-
-```
-sudo ufw default allow outgoing
-```
->*Alles, was rausgeht, wird erlaubt*  
-
-```
-sudo ufw allow ssh
-```
->*SSH Verbindung wird zugelassen*  
-
-```
-sudo ufw allow 80
-```
->*PORT 80 wird zugelassen*  
-
-```
-sudo ufw allow 8080
-```
->*Port 8080 wird zugelassen*  
-
-```
-sudo ufw allow 'Apache'
-```
->*Apache wird zugelassen*  
-
-```
-sudo ufw --force enable
-```
->*Firewall wird aktiviert*  
-
-```
-sudo ufw --force status verbose
-```
->*Einstellungen werden angezeigt*  
-
---------------------------------------------------------  
-
-## **2.6 Sicherheitsmerkmale  
-
-|Sicherheitsmerkmal|Begründung                                                             |
-|------------------|-----------------------------------------------------------------------|
-|1. Firewall Rules |Durch die Firewall Rules werden nur bestimmte Ports zugelassen         |
-|2. Wireshark Tool |Mit Wireshark kann der ganze Netzwerktraffic überwacht werden          |
-|3. Login SSH      |Wenn die VM gestartet wird, muss man sich anmelden mit username und pw |
+Das Monitoring Tool wurde mit dem Befehl "docker run -d --name cadvisor -v /:/rootfs:ro -v /var/run:/var/run:rw -v /sys:/sys:ro -v /var/lib/docker/:/var/lib/docker:ro -p 8080:8080 google/cadvisor:latest" installiert. Da das cAdvisor Container bereits existiert, konnte ich mit dem simplen Befehl den Container installieren und laufen lassen in meiner Umgebung.
 
 --------------------------------------------------------  
 
