@@ -1,4 +1,4 @@
-# **M300 LB03 Dokumentation - Webserver mit Website**  
+# **M300 LB03 Dokumentation - PHP Umgebung mit DB Zugriff**  
 
 ##### Author: Burim Muharemi
 ##### Datum: 02.05.2021  
